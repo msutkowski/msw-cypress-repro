@@ -1,0 +1,42 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  test:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:12.0
+
+    environment:
+      REACT_APP_API_URI: https://weird-msw-test-circleci.com/v1
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      # run tests!
+      - run: yarn test:e2e:ci
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

@@ -1,0 +1,17 @@
+name: Test
+
+on:
+  push:
+    tags-ignore:
+      - "*alpha*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build app
+        run: "yarn install --frozen-lockfile"
+      - name: Test it
+        run: "yarn test:e2e:ci"
