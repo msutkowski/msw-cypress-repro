@@ -1,9 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect, useState, useCallback } from "react";
+import logo from "./logo.svg";
+import { Counter } from "./features/counter/Counter";
+import "./App.css";
 
 function App() {
+  const [state, setState] = useState();
+
+  const fetchAnything = useCallback(() => {
+    fetch("https://httpbin.org/anything")
+      .then(async (res) => {
+        if (res.status > 300) {
+          throw await res.json()
+        }
+        return res.json()
+      })
+      .then((res) => setState(res.args))
+      .catch((err) =>  setState(err));
+  }, []);
+
+  useEffect(() => {
+    fetchAnything();
+  }, [fetchAnything]);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -12,6 +30,8 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
+        <button onClick={fetchAnything}>Fetch anything</button>
+        <div id="test-args">{JSON.stringify(state)}</div>
         <span>
           <span>Learn </span>
           <a
