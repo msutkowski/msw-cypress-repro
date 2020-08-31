@@ -16,7 +16,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "typescript": "~3.8.2"
   },
   "scripts": {
@@ -27,8 +27,10 @@
     "cypress:open": "cypress open",
     "cypress": "cypress open",
     "cypress:headless": "cypress run --browser chrome --headless",
-    "test:e2e": "start-server-and-test start 3000 cypress",
-    "test:e2e:ci": "start-server-and-test start 3000 cypress:headless"
+    "test:e2e": "start-server-and-test 'yarn start' 3000 'yarn cypress'",
+    "test:e2e:ci": "start-server-and-test 'yarn start' 3000 'yarn cypress:headless'",
+    "cypress:run": "cypress run --record --key=${CYPRESS_RECORD_KEY}",
+    "ci:cypress-run": "start-server-and-test start http://localhost:3000 cypress:run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +50,7 @@
   "devDependencies": {
     "@testing-library/cypress": "^6.0.1",
     "cypress": "^5.0.0",
-    "start-server-and-test": "^1.11.3"
+    "start-server-and-test": "^1.11.3",
+    "wait-on": "^5.2.0"
   }
 }
